@@ -60,5 +60,3 @@ Não é necessária nenhuma instalação complexa (npm, node, etc). O projeto ut
 * **JavaScript (ES6+):** Lógica de simulação, cálculos estatísticos avançados e manipulação do DOM.
 * **Chart.js:** Biblioteca externa para renderização dos gráficos dinâmicos.
 * **Google Fonts:** Tipografia (Poppins).
-
-## 📂 Estrutura de Arquivos
