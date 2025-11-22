@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório de Dados</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <header>
+            <h1>Laboratório de Dados <span class="highlight">e Estatística</span></h1>
+            <p class="subtitle">Simulação de Monte Carlo & Lei dos Grandes Números</p>
+        </header>
+
+        <div class="dashboard-grid">
+            
+            <aside class="sidebar">
+                <div class="control-card">
+                    <h2>Configurações</h2>
+                    
+                    <div class="input-group">
+                        <label for="num-dados">Número de Dados</label>
+                        <input type="number" id="num-dados" value="2" min="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="tipo-dado">Tipo de Dado</label>
+                        <select id="tipo-dado">
+                            <option value="4">D4 (Tetraedro)</option>
+                            <option value="6" selected>D6 (Cubo)</option>
+                            <option value="8">D8 (Octaedro)</option>
+                            <option value="10">D10 (Decaedro)</option>
+                            <option value="12">D12 (Dodecaedro)</option>
+                            <option value="20">D20 (Icosaedro)</option>
+                        </select>
+                    </div>
+
+                    <button id="btn-jogar" class="btn-primary">
+                        <span class="icon">🎲</span> Jogar 1 Rodada
+                    </button>
+                </div>
+
+                <div class="control-card simulation-card">
+                    <div class="header-with-icon">
+                        <h2>Simulação</h2>
+                        <span class="info-icon" id="info-monte-carlo" title="O que é isso?">?</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="num-simulacoes">Qtd. Simulações</label>
+                        <input type="number" id="num-simulacoes" value="1000" min="1">
+                    </div>
+
+                    <button id="btn-simular" class="btn-accent">
+                        <span class="icon">⚡</span> Rodar Monte Carlo
+                    </button>
+                </div>
+
+                <div class="last-round-card">
+                    <h3>Última Rodada</h3>
+                    <div class="round-details">
+                        <div class="player-score">
+                            <span class="label">Robô</span>
+                            <span class="score" id="soma-robo">--</span>
+                            <span class="rolls" id="rolagens-robo"></span>
+                        </div>
+                        <div class="versus">VS</div>
+                        <div class="player-score">
+                            <span class="label">Você</span>
+                            <span class="score" id="soma-humano">--</span>
+                            <span class="rolls" id="rolagens-humano"></span>
+                        </div>
+                    </div>
+                    <h4 id="resultado-rodada" class="status-text">Aguardando...</h4>
+                    <p id="comentario-robo" class="comentario-robo"></p>
+                </div>
+            </aside>
+
+            <main class="content-area">
+                
+                <div class="stats-header">
+                    <h2>Relatório Geral <span class="badge" id="total-partidas">0 partidas</span></h2>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card win">
+                        <span class="kpi-label">Vitórias</span>
+                        <strong class="kpi-value" id="prob-vitoria">--</strong>
+                    </div>
+                    <div class="kpi-card loss">
+                        <span class="kpi-label">Derrotas</span>
+                        <strong class="kpi-value" id="prob-derrota">--</strong>
+                    </div>
+                    <div class="kpi-card draw">
+                        <span class="kpi-label">Empates</span>
+                        <strong class="kpi-value" id="prob-empate">--</strong>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Média (Você)</span>
+                        <strong class="kpi-value" id="media-humano">--</strong>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Média (Robô)</span>
+                        <strong class="kpi-value" id="media-robo">--</strong>
+                    </div>
+                </div>
+
+                <div class="conditional-card">
+                    <label>🧠 Probabilidade Condicional</label>
+                    <div class="conditional-flex">
+                        <span>P(Você Vencer | Robô tirou soma</span>
+                        <select id="select-prob-condicional">
+                            <option value="">...</option>
+                        </select>
+                        <span>) = </span>
+                        <strong id="resultado-prob-condicional">--</strong>
+                    </div>
+                </div>
+
+                <div class="charts-wrapper">
+                    <div class="chart-card">
+                        <h3>Distribuição Normal (Teorema do Limite Central)</h3>
+                        <div class="chart-container">
+                            <canvas id="grafico-distribuicao"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-grid-row">
+                        <div class="chart-card half">
+                            <h3>Resultados Totais</h3>
+                            <div class="chart-container-small">
+                                <canvas id="grafico-resultados"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card half">
+                            <h3>Convergência</h3>
+                            <div class="chart-container-small">
+                                <canvas id="grafico-probabilidade-tempo"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="modal-oculto"></div>
+    <div id="modal-monte-carlo" class="modal-box modal-oculto">    
+        <div class="modal-header">
+            <h2>O que é Monte Carlo?</h2>
+            <button class="modal-close" id="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-content">
+            <p>A Simulação de Monte Carlo usa a força bruta computacional para entender a sorte.</p>
+            <p>Ao jogarmos os dados milhares de vezes em segundos, transformamos incerteza em probabilidade exata.</p>
+            <div class="highlight-box">
+                <strong>O que observar:</strong>
+                Veja como a linha laranja do gráfico de distribuição se encaixa perfeitamente nas barras azuis quanto mais você joga. Isso é a matemática "domando" o acaso.
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
