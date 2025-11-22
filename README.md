@@ -47,7 +47,7 @@ Não é necessária nenhuma instalação complexa (npm, node, etc). O projeto ut
 
 1.  Baixe os arquivos do projeto.
 2.  Certifique-se de que os três arquivos essenciais estejam na mesma pasta:
-    * `index.html`
+    * `estatistica.html`
     * `style.css`
     * `script.js`
 3.  Abra o arquivo `index.html` em qualquer navegador moderno (Chrome, Edge, Firefox, Safari).
